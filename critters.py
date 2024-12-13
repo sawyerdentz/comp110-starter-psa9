@@ -4,8 +4,8 @@ Module: critters
 A Python implementation of Critters!
 
 Authors:
-1) Name - USD Email Address
-2) Name - USD Email Address
+1) Sawyer Dentz - sdentz@sandiego.edu
+2) Matt Oderlin - moderlin@sandeigo.edu
 """
 
 import random
@@ -68,32 +68,191 @@ Note: remove the "pass" statement after you start implementing the constructor.
 """
 
 class Bear(Critter):
-    """ Replace this with a docstring for your class. """
+    """
+    Representation of a bear in our world
+    """
 
     def __init__(self, location, is_grizzly):
-        pass
+        super().__init__(location)
+        self.is_grizzly = is_grizzly
+        self.move_count = 0
+    
+    def get_color(self):
+        """ Returns the color with which to display this lion. """
+        if self.is_grizzly:
+            return "brown"
+        else:
+            return "snow"
+
+    def eat(self):
+        """ Returns True if the bear wants to eat, False otherwise. """
+        return True
+
+    def fight(self, opponent):
+        """ Gets the next fight move for the bear. """
+        return Attack.SCRATCH
+
+    def get_move(self, neighbors):
+        """ Gets the next move the bear wants to make. """
+        if self.move_count % 2 == 0:
+            self.move_count += 1
+            return Direction.NORTH
+        else:
+            self.move_count += 1
+            return Direction.WEST
+
+    def __str__(self):
+        """
+        Returns a string representation of the bear.
+        This representation is used when fighting another critter.
+        """
+        return "B"
 
 
 class Cheetah(Critter):
     """ Replace this with a docstring for your class. """
 
     def __init__(self, location, hunger):
-        pass
+        super().__init__(location)
+        self.hunger = hunger
+        self.moveset = [Direction.SOUTH, Direction.WEST, Direction.NORTH, Direction.EAST]
+        self.move_count = 0
+        self.current_move = random.choice(self.moveset)
+
+    def get_color(self):
+        """ Returns the color with which to display this cheetah. """
+        return "red"
+
+    def eat(self):
+        """ Returns True if the cheetah wants to eat, False otherwise. """
+        self.hunger -= 1
+        if self.hunger >= 0:
+            return True
+        else:
+            self.hunger = 0
+            return False
+
+    def fight(self, opponent):
+        """ Gets the next fight move for the cheetah. """
+        if self.hunger > 0:
+            return Attack.SCRATCH
+        else:
+            return Attack.POUNCE
+    
+    def get_move(self, neighbors):
+        """ Gets the next move the cheetah wants to make. """
+        if self.move_count % 3 == 0:
+            self.current_move = random.choice(self.moveset)
+        self.move_count += 1
+        return self.current_move
+
+    def __str__(self):
+        """
+        Returns a string representation of the cheetah.
+        This representation is used when fighting another critter.
+        """
+        return str(self.hunger)
 
 
 class Lion(Critter):
     """ Replace this with a docstring for your class. """
 
     def __init__(self, location):
-        pass
+        super().__init__(location)
+        self.hungry = False
+        self.moveset = [Direction.SOUTH, Direction.WEST, Direction.NORTH, Direction.EAST]
+        self.move_count = 0
 
+    def get_color(self):
+        """ Returns the color with which to display this lion. """
+        return "goldenrod3"
+
+    def eat(self):
+        """ Returns True if the lion wants to eat, False otherwise. """
+        if self.hungry:
+            self.hungry = False
+            return True
+        else:
+            return False
+
+    def fight(self, opponent):
+        """ Gets the next fight move for the lion. """
+        self.hungry = True
+        if opponent == "B":
+            return Attack.ROAR
+        else:
+            return Attack.POUNCE
+
+    def get_move(self, neighbors):
+        """ Gets the next move the lion wants to make. """
+        move = self.moveset[self.move_count // 5]
+        self.move_count += 1
+        if self.move_count >= 20:
+            self.move_count = 0
+        return move
+
+    def __str__(self):
+        """
+        Returns a string representation of the lion.
+        This representation is used when fighting another critter.
+        """
+        return "L"
 
 class Torero(Critter):
     """ Replace this with a docstring for your class. """
 
     def __init__(self, location):
-        pass
+        super().__init__(location)
+        self.move_count = 0
+    
+    def get_color(self):
+        """ Returns the color with which to display this torero. """
+        # return "blue"
+        return random.choice(("black","dimgray","gray","darkgray","silver","lightgray","gainsboro","whitesmoke","white","snow",
+                              "rosybrown","lightcoral","indianred","brown","firebrick","maroon","darkred","red","mistyrose","salmon",
+                              "tomato","darksalmon","coral","orangered","lightsalmon","sienna","seashell","chocolate","saddlebrown",
+                              "sandybrown","peachpuff","peru","linen","bisque","darkorange","burlywood","antiquewhite","tan","navajowhite",
+                              "blanchedalmond","papayawhip","moccasin","orange","wheat","oldlace","floralwhite","darkgoldenrod","goldenrod",
+                              "cornsilk","gold","lemonchiffon","khaki","palegoldenrod","darkkhaki","ivory","beige","lightyellow",
+                              "lightgoldenrodyellow","olive","yellow","olivedrab","yellowgreen","darkolivegreen","greenyellow","chartreuse",
+                              "lawngreen","honeydew","darkseagreen","palegreen","lightgreen","forestgreen","limegreen","darkgreen","green",
+                              "lime","seagreen","mediumseagreen","springgreen","mintcream","mediumspringgreen","mediumaquamarine","aquamarine",
+                              "turquoise","lightseagreen","mediumturquoise","azure","lightcyan","paleturquoise","darkslategray","teal",
+                              "darkcyan","aqua","cyan","darkturquoise","cadetblue","powderblue","lightblue","deepskyblue","skyblue",
+                              "lightskyblue","steelblue","aliceblue","dodgerblue","lightslategray","slategray","lightsteelblue","cornflowerblue",
+                              "royalblue","ghostwhite","lavender","midnightblue","navy","darkblue","mediumblue","blue","slateblue",
+                              "darkslateblue","mediumslateblue","mediumpurple","blueviolet","indigo","darkorchid","darkviolet","mediumorchid",
+                              "thistle","plum","violet","purple","darkmagenta","fuchsia","magenta","orchid","mediumvioletred","deeppink",
+                              "hotpink","lavenderblush","palevioletred","crimson","pink","lightpink"))
+    
+    def eat(self):
+        """ Returns True if the torero wants to eat, False otherwise. """
+        return True
 
+    def fight(self, opponent):
+        """ Gets the next fight move for the torero. """
+
+        return 5
+
+    def get_move(self, neighbors):
+        """ Gets the next move the torero wants to make. """
+
+        possible_direct = [Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST]
+        for key in neighbors:
+            if neighbors[key] != None:
+                if neighbors[key] == "T":
+                    return key
+                else:
+                    possible_direct.remove(key)
+        return random.choice(possible_direct)
+                
+    
+    def __str__(self):
+        """
+        Returns a string representation of the torero.
+        This representation is used when fighting another critter.
+        """
+        return "T"
 
 
 
